@@ -10,6 +10,11 @@ import Link from "next/link";
 import { toast } from "sonner";
 import FormField from "./FormField";
 import { useRouter } from "next/navigation";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "@/firebase/client";
 
 const authFormSchema = (type: FormType) => {
   return z.object({
@@ -31,12 +36,60 @@ const AuthForm = ({ type }: { type: FormType }) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       if (type === "signUp") {
+        const { name, email, password } = values;
+
+        const userCredentials = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const userId = userCredentials.user.uid;
+        const res = await fetch("/api/auth-actions/sign-up", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          cache: "no-cache",
+          body: JSON.stringify({ name, email, userId }),
+        });
+        const userDocStatus = await res.json();
+        if (!userDocStatus.success) {
+          toast.error(userDocStatus.message);
+          return;
+        }
         toast.success("account created successfully");
         router.push("/signIn");
       } else {
+        const { email, password } = values;
+
+        const userCredentials = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const idToken = await userCredentials.user.getIdToken();
+
+        if (!idToken) {
+          toast.error("Sign in failed");
+          return;
+        }
+        const res = await fetch("/api/auth-actions/sign-in", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          cache: "no-cache",
+          body: JSON.stringify({ email, idToken }),
+        });
+        if (res.ok) {
+          window.location.href = "/";
+        }
+        const userSignInStatus = await res.json();
+
         toast.success("Sign in sucessfull");
         router.push("/");
       }
