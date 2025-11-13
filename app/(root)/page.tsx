@@ -18,7 +18,7 @@ const page = async () => {
       { cache: "no-cache" }
     ).then((res) => res.json()),
   ]);
-  console.log(otherInterviews);
+  console.log(otherInterviews, userInterviews);
 
   const hasPastInterviews = userInterviews.length > 0;
   const hasUpcoingInterviews = otherInterviews.length > 0;
