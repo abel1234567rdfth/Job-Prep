@@ -1,11 +1,27 @@
 import InterviewCard from "@/components/InterviewCard";
 import { Button } from "@/components/ui/button";
 import { dummyInterviews } from "@/constants";
+import { getCurrentUser } from "@/lib/helper actions";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const page = () => {
+const page = async () => {
+  const user = await getCurrentUser();
+  const [userInterviews, otherInterviews] = await Promise.all([
+    fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/user-actions/get-user-interviews?userId=${user?.id}`,
+      { cache: "no-cache" }
+    ).then((res) => res.json()),
+    fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/user-actions/get-other-interviews?userId=${user?.id}`,
+      { cache: "no-cache" }
+    ).then((res) => res.json()),
+  ]);
+  console.log(otherInterviews);
+
+  const hasPastInterviews = userInterviews.length > 0;
+  const hasUpcoingInterviews = otherInterviews.length > 0;
   return (
     <>
       <section className="card-cta">
@@ -15,7 +31,7 @@ const page = () => {
             Practice on real job questions & get instant feedback
           </p>
           <Button asChild className="btn-primary max-sm:w-full">
-            <Link href={"/interview"}>Start an Interview</Link>
+            <Link href={"/prep"}>Start an Interview</Link>
           </Button>
         </div>
         <Image
@@ -30,19 +46,25 @@ const page = () => {
       <section className="flex flex-col gap-6 mt-8">
         <h2>Your Preps</h2>
         <div className="interviews-section">
-          {dummyInterviews.map((interview) => (
-            <InterviewCard {...interview} key={interview.id} />
-          ))}
-
-          <p>You haven't taken any interviews yet</p>
+          {hasPastInterviews ? (
+            userInterviews.map((interview: Interview) => (
+              <InterviewCard {...interview} key={interview.id} />
+            ))
+          ) : (
+            <p>You haven't taken any interviews yet</p>
+          )}
         </div>
       </section>
       <section className="flex flex-col gap-6 mt-8">
+        <h2>Take an Interview</h2>
         <div className="interviews-section">
-          {dummyInterviews.map((interview) => (
-            <InterviewCard {...interview} key={interview.id} />
-          ))}
-          <p>There are no interviews available</p>
+          {hasUpcoingInterviews ? (
+            otherInterviews.map((interview: Interview) => (
+              <InterviewCard {...interview} key={interview.id} />
+            ))
+          ) : (
+            <p>There are no interviews available</p>
+          )}
         </div>
       </section>
     </>
