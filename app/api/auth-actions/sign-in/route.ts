@@ -46,5 +46,3 @@ export async function setSessionCookie(idToken: string) {
     console.error(err.message);
   }
 }
-
-// write sisgn in post api use the setcookie function here

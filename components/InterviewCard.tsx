@@ -6,8 +6,9 @@ import { getRandomInterviewCover } from "@/lib/utils";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import DisplayTechIcons from "./DisplayTechIcons";
+import { getCurrentUser } from "@/lib/helper actions";
 
-const InterviewCard = ({
+const InterviewCard = async ({
   id,
   userId,
   role,
@@ -15,7 +16,16 @@ const InterviewCard = ({
   createdAt,
   type,
 }: InterviewCardProps) => {
-  const feedback = null;
+  const user = await getCurrentUser();
+
+  const res2 = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/user-actions/get-feedback?interviewId=${id}&userId=${user?.id}`,
+    { cache: "no-cache" }
+  );
+
+  const feedback = await res2.json();
+  console.log(userId, id);
+  console.log(feedback);
 
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
   const formatDate = dayjs(
@@ -55,8 +65,9 @@ const InterviewCard = ({
             </div>
           </div>
           <p className="line-clamp-2">
-            {feedback?.finalAssessment ||
-              "you haven't taken the interview yet.Take it to improve your skills."}
+            {feedback
+              ? feedback?.finalAssessment
+              : "you haven't taken the interview yet.Take it to improve your skills."}
           </p>
         </div>
         <div className="flex justify-between">

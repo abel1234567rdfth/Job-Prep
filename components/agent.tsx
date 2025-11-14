@@ -81,6 +81,19 @@ const Agent = ({
           },
         }
       );
+    } else if ((type = "generate course")) {
+      await vapi.start(
+        undefined,
+        undefined,
+        undefined,
+        process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!,
+        {
+          variableValues: {
+            username: userName,
+            userid: userId,
+          },
+        }
+      );
     } else {
       let formattedQuestions = "";
 

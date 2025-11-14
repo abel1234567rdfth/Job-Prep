@@ -30,9 +30,14 @@ const page = async () => {
           <p className="text-lg">
             Practice on real job questions & get instant feedback
           </p>
-          <Button asChild className="btn-primary max-sm:w-full">
-            <Link href={"/prep"}>Start an Interview</Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button asChild className="btn-primary max-sm:w-full">
+              <Link href={"/prep"}>Start an Interview</Link>
+            </Button>
+            <Button asChild className="btn-primary max-sm:w-full">
+              <Link href={"/course"}>Start a Course</Link>
+            </Button>
+          </div>
         </div>
         <Image
           src={"/robot.png"}
@@ -44,11 +49,28 @@ const page = async () => {
       </section>
 
       <section className="flex flex-col gap-6 mt-8">
+        <h2>Your Courses</h2>
+        <div className="interviews-section">
+          {hasPastInterviews ? (
+            userInterviews.map((interview: Interview) => (
+              <InterviewCard {...interview} key={interview.id} type="course" />
+            ))
+          ) : (
+            <p>You haven't taken any interviews yet</p>
+          )}
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-6 mt-8">
         <h2>Your Preps</h2>
         <div className="interviews-section">
           {hasPastInterviews ? (
             userInterviews.map((interview: Interview) => (
-              <InterviewCard {...interview} key={interview.id} />
+              <InterviewCard
+                {...interview}
+                key={interview.id}
+                type="interview"
+              />
             ))
           ) : (
             <p>You haven't taken any interviews yet</p>
@@ -56,11 +78,15 @@ const page = async () => {
         </div>
       </section>
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Take an Interview</h2>
+        <h2>Other People's Preps</h2>
         <div className="interviews-section">
           {hasUpcoingInterviews ? (
             otherInterviews.map((interview: Interview) => (
-              <InterviewCard {...interview} key={interview.id} />
+              <InterviewCard
+                {...interview}
+                key={interview.id}
+                type="interview"
+              />
             ))
           ) : (
             <p>There are no interviews available</p>
