@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { vapi } from "@/lib/vapi.sdk";
 import { courseTeacher, interviewer } from "@/constants";
+import { refresh } from "next/cache";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -99,10 +100,7 @@ const Agent = ({
     } else if (type === "take course") {
       let formattedCourse = "";
       if (course) {
-        formattedCourse = course
-          .split("\n")
-          .map((c) => `- ${c.trim()}`)
-          .join("\n");
+        formattedCourse = course.map((course) => `-${course}`).join("/n");
       }
 
       await vapi.start(courseTeacher, {

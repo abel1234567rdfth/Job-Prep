@@ -85,7 +85,7 @@ const InterviewCard = async ({
             </p>
           ) : (
             <p className="line-clamp-2">
-              {feedback
+              {feedback.id
                 ? feedback?.finalAssessment
                 : "you haven't taken the interview yet.Take it to improve your skills."}
             </p>
@@ -99,8 +99,8 @@ const InterviewCard = async ({
             </Button>
           ) : (
             <Button className="btn-primary">
-              <Link href={feedback ? `/prep/${id}/feedback` : `/prep/${id}`}>
-                {feedback ? "Check Feedback" : "View"}
+              <Link href={feedback.id ? `/prep/${id}/feedback` : `/prep/${id}`}>
+                {feedback.id ? "Check Feedback" : "View"}
               </Link>
             </Button>
           )}

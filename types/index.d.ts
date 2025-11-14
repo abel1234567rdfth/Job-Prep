@@ -71,7 +71,7 @@ interface AgentProps {
   type: "generate" | "interview" | "generate course" | "take course";
   questions?: string[];
   courseId?: string;
-  course?: string;
+  course?: string[];
 }
 
 interface RouteParams {

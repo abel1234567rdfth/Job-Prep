@@ -1,25 +1,27 @@
+export const dynamic = "force-dynamic";
+
 import InterviewCard from "@/components/InterviewCard";
 import { Button } from "@/components/ui/button";
-import { dummyInterviews } from "@/constants";
+
 import { getCurrentUser } from "@/lib/helper actions";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 const page = async () => {
+  console.log("Home page rendered at:", new Date().toISOString());
   const user = await getCurrentUser();
   const [userInterviews, otherInterviews, userCourses] = await Promise.all([
     fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/user-actions/get-user-interviews?userId=${user?.id}`,
-      { cache: "no-cache" }
+      { cache: "no-store" }
     ).then((res) => res.json()),
     fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/user-actions/get-other-interviews?userId=${user?.id}`,
-      { cache: "no-cache" }
+      { cache: "no-store" }
     ).then((res) => res.json()),
     fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/user-actions/get-user-courses?userId=${user?.id}`,
-      { cache: "no-cache" }
+      { cache: "no-store" }
     ).then((res) => res.json()),
   ]);
 

@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       `,
     });
 
-    // 2️⃣ Safely parse questions
+    // 2 Safely parse questions
     let parsedQuestions: string[];
     try {
       parsedQuestions = JSON.parse(questions);
