@@ -17,6 +17,8 @@ Prepare Topics to study  for a job interview.
         The job experience level is ${level}.
         The tech stack used in the job is: ${techstack}.
         The focus between behavioural and technical Topics to study  should lean towards: ${type}.
+        The maximum amount of topics is 4
+        do not generate morethan 4 topics 
         Please return only the Topics to study , without any additional text.
         The Topics to study  are going to be read by a voice assistant so do not use "/" or "*" or any other special characters.
         Return the Topics to study  formatted like this:
