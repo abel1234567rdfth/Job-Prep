@@ -24,6 +24,17 @@ interface Interview {
   type: string;
   finalized: boolean;
 }
+interface Course {
+  courseId: string;
+  role: string;
+  level: string;
+  questions: string;
+  techstack: string[];
+  createdAt: string;
+  userId: string;
+  type: string;
+  finalized: boolean;
+}
 
 interface CreateFeedbackParams {
   interviewId: string;
@@ -45,6 +56,11 @@ interface InterviewCardProps {
   type: string;
   techstack: string[];
   createdAt?: string;
+  variant?: "course" | "interview";
+}
+
+interface InterviewCardCourseProps extends InterviewCardProps {
+  courseId?: string;
 }
 
 interface AgentProps {
@@ -54,6 +70,8 @@ interface AgentProps {
   feedbackId?: string;
   type: "generate" | "interview" | "generate course" | "take course";
   questions?: string[];
+  courseId?: string;
+  course?: string;
 }
 
 interface RouteParams {

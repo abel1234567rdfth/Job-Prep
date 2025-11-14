@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { vapi } from "@/lib/vapi.sdk";
-import { interviewer } from "@/constants";
+import { courseTeacher, interviewer } from "@/constants";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -25,11 +25,14 @@ const Agent = ({
   type,
   questions,
   interviewId,
+  courseId,
+  course,
 }: AgentProps) => {
   const router = useRouter();
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
+  console.log(type);
   useEffect(() => {
     const onCallStart = () => setCallStatus(CallStatus.ACTIVE);
     const onCallEnd = () => setCallStatus(CallStatus.FINISHED);
@@ -64,7 +67,6 @@ const Agent = ({
       vapi.off("error", onError);
     };
   }, []);
-  console.log(userId);
 
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING);
@@ -81,12 +83,12 @@ const Agent = ({
           },
         }
       );
-    } else if ((type = "generate course")) {
+    } else if (type === "generate course") {
       await vapi.start(
         undefined,
         undefined,
         undefined,
-        process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!,
+        process.env.NEXT_PUBLIC_VAPI_WORKFLOW2_ID,
         {
           variableValues: {
             username: userName,
@@ -94,6 +96,20 @@ const Agent = ({
           },
         }
       );
+    } else if (type === "take course") {
+      let formattedCourse = "";
+      if (course) {
+        formattedCourse = course
+          .split("\n")
+          .map((c) => `- ${c.trim()}`)
+          .join("\n");
+      }
+
+      await vapi.start(courseTeacher, {
+        variableValues: {
+          course: formattedCourse,
+        },
+      });
     } else {
       let formattedQuestions = "";
 
@@ -134,7 +150,11 @@ const Agent = ({
 
   useEffect(() => {
     if (callStatus === CallStatus.FINISHED) {
-      if (type === "generate") {
+      if (
+        type === "generate" ||
+        type === "generate course" ||
+        type === "take course"
+      ) {
         router.push("/");
       } else {
         handleGenerateFeedback(messages);
@@ -160,7 +180,7 @@ const Agent = ({
             />
             {isSpeaking && <span className="animate-speak"></span>}
           </div>
-          <h3>AI Interviewer</h3>
+          <h3>{type === "take course" ? "Instructor" : "AI Interviewer"}</h3>
         </div>
 
         <div className="card-border">

@@ -15,7 +15,9 @@ const InterviewCard = async ({
   techstack,
   createdAt,
   type,
-}: InterviewCardProps) => {
+  variant,
+  courseId,
+}: InterviewCardCourseProps) => {
   const user = await getCurrentUser();
 
   const res2 = await fetch(
@@ -36,7 +38,9 @@ const InterviewCard = async ({
       <div className="card-interview ">
         <div>
           <div className="absolute top-0 right-0 w-fit px-4 py-2 rounded-bl-lg bg-light-600">
-            <p className="badge-text">{normalizedType}</p>
+            <p className="badge-text">
+              {variant === "course" ? "Course" : normalizedType}
+            </p>
           </div>
           <Image
             src={getRandomInterviewCover()}
@@ -60,23 +64,46 @@ const InterviewCard = async ({
             </div>
 
             <div className="flex gap-2">
+              {variant === "course" && (
+                <>
+                  <Image src={"/star.svg"} alt="star" width={22} height={22} />
+                  <Image src={"/star.svg"} alt="star" width={22} height={22} />
+                </>
+              )}
               <Image src={"/star.svg"} alt="star" width={22} height={22} />
-              <p>{feedback?.totalScore || "---"}/100</p>
+              <p>
+                {variant === "course"
+                  ? ""
+                  : `${feedback?.totalScore || "---"}/100`}
+              </p>
             </div>
           </div>
-          <p className="line-clamp-2">
-            {feedback
-              ? feedback?.finalAssessment
-              : "you haven't taken the interview yet.Take it to improve your skills."}
-          </p>
+          {variant === "course" ? (
+            <p className="line-clamp-2 mt-2">
+              Explore the contents of the course in order to get ready and ace
+              your interviews
+            </p>
+          ) : (
+            <p className="line-clamp-2">
+              {feedback
+                ? feedback?.finalAssessment
+                : "you haven't taken the interview yet.Take it to improve your skills."}
+            </p>
+          )}
         </div>
         <div className="flex justify-between">
           <DisplayTechIcons techStack={techstack} />
-          <Button className="btn-primary">
-            <Link href={feedback ? `/prep/${id}/feedback` : `/prep/${id}`}>
-              {feedback ? "Check Feedback" : "View"}
-            </Link>
-          </Button>
+          {variant === "course" ? (
+            <Button className="btn-primary">
+              <Link href={`/course/${courseId}`}>View Course</Link>
+            </Button>
+          ) : (
+            <Button className="btn-primary">
+              <Link href={feedback ? `/prep/${id}/feedback` : `/prep/${id}`}>
+                {feedback ? "Check Feedback" : "View"}
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
     </div>

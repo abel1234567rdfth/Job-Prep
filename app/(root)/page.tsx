@@ -8,7 +8,7 @@ import React from "react";
 
 const page = async () => {
   const user = await getCurrentUser();
-  const [userInterviews, otherInterviews] = await Promise.all([
+  const [userInterviews, otherInterviews, userCourses] = await Promise.all([
     fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/user-actions/get-user-interviews?userId=${user?.id}`,
       { cache: "no-cache" }
@@ -17,11 +17,17 @@ const page = async () => {
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/user-actions/get-other-interviews?userId=${user?.id}`,
       { cache: "no-cache" }
     ).then((res) => res.json()),
+    fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/user-actions/get-user-courses?userId=${user?.id}`,
+      { cache: "no-cache" }
+    ).then((res) => res.json()),
   ]);
-  console.log(otherInterviews, userInterviews);
 
   const hasPastInterviews = userInterviews.length > 0;
   const hasUpcoingInterviews = otherInterviews.length > 0;
+  const hasCourses = userCourses.length > 0;
+
+  console.log(userCourses);
   return (
     <>
       <section className="card-cta">
@@ -51,12 +57,16 @@ const page = async () => {
       <section className="flex flex-col gap-6 mt-8">
         <h2>Your Courses</h2>
         <div className="interviews-section">
-          {hasPastInterviews ? (
-            userInterviews.map((interview: Interview) => (
-              <InterviewCard {...interview} key={interview.id} type="course" />
+          {hasCourses ? (
+            userCourses.map((course: Course) => (
+              <InterviewCard
+                {...course}
+                key={course.courseId}
+                variant="course"
+              />
             ))
           ) : (
-            <p>You haven't taken any interviews yet</p>
+            <p>You haven't taken any Courses yet</p>
           )}
         </div>
       </section>
