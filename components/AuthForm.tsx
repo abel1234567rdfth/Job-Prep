@@ -97,16 +97,21 @@ const AuthForm = ({ type }: { type: FormType }) => {
       console.log(err);
       toast.error(`There Was an error:${err}`);
     }
-    console.log(values);
   }
 
   const issignIn = type === "signIn";
   return (
-    <div className="card-border lg:min-w-[570px]">
+    <div className="card-border lg:min-w-[480px]">
       <div className="flex flex-col gap-6 card py-14 px-10 items-center">
-        <div className="flex flex-row gap-2 justify-center">
-          <Image src={"/logo.svg"} alt="logo" height={32} width={38} />
-          <h2 className="text-primary-100">PrepWise</h2>
+        <div className="flex flex-row gap-2 mx-auto justify-center items-center">
+          <Image
+            src={"/logo.png"}
+            alt="logo"
+            height={120}
+            width={120}
+            className="-ml-12"
+          />
+          <h2 className="text-primary-100 -ml-12">PrepWise</h2>
         </div>
         <h3>Get ready For jobs with AI</h3>
 

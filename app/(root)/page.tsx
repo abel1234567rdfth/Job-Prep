@@ -8,7 +8,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 const page = async () => {
-  console.log("Home page rendered at:", new Date().toISOString());
   const user = await getCurrentUser();
   const [userInterviews, otherInterviews, userCourses] = await Promise.all([
     fetch(
@@ -29,7 +28,6 @@ const page = async () => {
   const hasUpcoingInterviews = otherInterviews.length > 0;
   const hasCourses = userCourses.length > 0;
 
-  console.log(userCourses);
   return (
     <>
       <section className="card-cta">
@@ -48,16 +46,21 @@ const page = async () => {
           </div>
         </div>
         <Image
-          src={"/robot.png"}
+          src={"/onboarding.png"}
           alt="robot"
           width={400}
           height={400}
-          className="hidden sm:block"
+          className="hidden sm:block rounded-full"
         />
       </section>
 
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Your Courses</h2>
+        <div>
+          <h2>Your Courses</h2>
+          <p className="text-gray-400">
+            you might need to refresh if your generated course does not appear
+          </p>
+        </div>
         <div className="interviews-section">
           {hasCourses ? (
             userCourses.map((course: Course) => (
@@ -74,7 +77,13 @@ const page = async () => {
       </section>
 
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Your Preps</h2>
+        <div>
+          <h2>Your Preps</h2>
+          <p className="text-gray-400">
+            you might need to refresh if your generated Interview does not
+            appear
+          </p>
+        </div>
         <div className="interviews-section">
           {hasPastInterviews ? (
             userInterviews.map((interview: Interview) => (
@@ -90,7 +99,9 @@ const page = async () => {
         </div>
       </section>
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Other People's Preps</h2>
+        <div>
+          <h2>Other People's Preps</h2>
+        </div>
         <div className="interviews-section">
           {hasUpcoingInterviews ? (
             otherInterviews.map((interview: Interview) => (

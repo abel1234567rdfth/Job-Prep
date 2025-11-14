@@ -15,7 +15,7 @@ const interview = async ({ params }: RouteParams) => {
     { cache: "no-cache" }
   );
   const course = await res.json();
-  console.log(course);
+
   if (!course) redirect("/");
 
   return (

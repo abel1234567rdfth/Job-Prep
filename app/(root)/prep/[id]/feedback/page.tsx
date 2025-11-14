@@ -32,8 +32,6 @@ const Feedback = async ({ params }: RouteParams) => {
 
   const feedback = await res2.json();
 
-  console.log(feedback);
-
   return (
     <section className="section-feedback">
       <div className="flex  justify-center">

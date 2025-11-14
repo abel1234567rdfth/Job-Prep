@@ -33,7 +33,7 @@ const Agent = ({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
-  console.log(type);
+
   useEffect(() => {
     const onCallStart = () => setCallStatus(CallStatus.ACTIVE);
     const onCallEnd = () => setCallStatus(CallStatus.FINISHED);
@@ -184,7 +184,7 @@ const Agent = ({
         <div className="card-border">
           <div className="card-content">
             <Image
-              src={"/user-avatar.png"}
+              src={"/user-avatar.avif"}
               alt="user avatar"
               width={540}
               height={540}
