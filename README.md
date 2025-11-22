@@ -1,6 +1,5 @@
 PrepWise — AI-Powered Job Preparation Platform
 
-🔗 **Live Demo:**  [ Job Prep](https://jobprep-rose.vercel.app/)
 
 An intelligent platform that generates interviews, courses, and real-time AI voice interactions using VAPI, Gemini, Firebase, and Next.js.
 
